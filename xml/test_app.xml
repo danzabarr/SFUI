@@ -1,0 +1,54 @@
+<Application id="Test" version="1.0.0">
+
+  <Data id="user_settings_title_locale">
+    <string>Settings</string>
+  </Data>
+
+  <Data id="dark_mode">
+    <bool>true</bool>
+  </Data>
+
+  <Data id="camera_position">
+    <float>-29.284</float>
+    <float>4.233</float>
+  </Data>
+
+  <Define id="AboutPanel" template="Panel">
+    
+    <Button action="close">Close</Button>
+  </Define>
+
+  <AboutPanel>
+    
+  </AboutPanel>
+  
+  <Window id="main_window" title="SFUI" width="800" height="600">
+    <Panel id="user_settings" minimum_width="200">
+      <Label id="user_settings_title" tags="title" model="user_settings_title_locale">
+        Settings
+      </Label>
+
+      <Panel id="dark_mode_field" justify="horizontal fit">
+
+        <Label id="dark_mode_label">
+          Dark Mode
+        </Label>
+
+        <Toggle id="dark_mode_toggle" model="dark_mode">
+        </Toggle>
+        
+      </Panel>
+
+      <Button id="confirm_button">
+        <!-- Create a Button (extends Control<>)-->
+        <text>Confirm</text>
+
+        <bind>user_settings</bind>
+        <!-- Binds this Control<> to the user_settings element.-->
+        <action>close</action>
+        <!-- Specifies the action to perform with the binding.-->
+      </Button>
+    </Panel>
+  </Window>
+
+</Application>

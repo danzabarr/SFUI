@@ -1,0 +1,1 @@
+C:\Users\Dan\Downloads\freetype-2.9.tar\freetype-2.9\freetype-2.9\objs\Win32\Release\freetype.dll
