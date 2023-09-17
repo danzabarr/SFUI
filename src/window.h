@@ -1,8 +1,8 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "element.h"
 #include <string>
 #include "tinyxml2.h"
+#include <SFML/Graphics.hpp>
 
 namespace sfui
 {

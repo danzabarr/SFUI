@@ -5,7 +5,6 @@
 #include <functional>
 #include <vector>
 
-#include <SFML/Graphics.hpp>
 #include "tinyxml2.h"
 
 #include "element.h"
@@ -54,7 +53,7 @@ int main()
 	Control<float, float>* resizer = new Control<float, float>();
 
 	sf::Color color;
-	e1->call("hello", color, 3.2f);
+	e1->call("hello", color, 3);// .2f);
 
 	resizer->bind(*e1, "size");
 	resizer->push(.5f, .5f);

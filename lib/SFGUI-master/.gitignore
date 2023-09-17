@@ -1,9 +1,0 @@
-*.a
-*.o
-*.os
-*.so
-/doc/html/
-*build*/
-/.vs
-/CMakeSettings.json
-[Oo]ut/

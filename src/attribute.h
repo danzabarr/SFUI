@@ -2,7 +2,6 @@
 
 #include <string>
 #include <sstream>
-#include <SFML/Graphics.hpp>
 
 namespace sfui
 {

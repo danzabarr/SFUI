@@ -1,9 +1,11 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <string>
+
+#include "tinyxml2.h"
+
 #include "window.h"
 #include "element.h"
 #include "application.h"
-#include <string>
 
 namespace sfui
 {

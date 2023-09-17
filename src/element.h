@@ -4,8 +4,9 @@
 #include <vector>
 #include <string>
 
-#include <SFML/Graphics.hpp>
 #include "tinyxml2.h"
+#include <SFML/Graphics.hpp>
+
 #include <any>
 
 #define PRINT_WARNINGS
@@ -55,8 +56,11 @@ namespace sfui
 			if constexpr
 				(
 					size == 2 &&
-					check_nth_param<0, sf::Color,	Params...>::value &&
-					check_nth_param<2, int,			Params...>::value
+					//check_nth_param<0, sf::Color,	Params...>::value &&
+					//check_nth_param<2, int,			Params...>::value
+
+					std::is_same_v<std::tuple_element_t<0, std::tuple<Params...>>, sf::Color>&&
+					std::is_same_v<std::tuple_element_t<1, std::tuple<Params...>>, int>
 				)
 			{
 				if (name == "hello") return [this](sf::Color color, int b) { std::cout << "oaou" << std::endl; };

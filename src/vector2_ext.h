@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -11,3 +12,4 @@ namespace sf
 		return os << "(" << vector.x << ", " << vector.y << ")";
 	}
 };
+*/

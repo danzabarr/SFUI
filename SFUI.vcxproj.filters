@@ -74,5 +74,8 @@
     <ClInclude Include="src\params.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
