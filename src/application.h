@@ -1,7 +1,8 @@
 #pragma once
 
+#include <TinyXML-2/tinyxml2.h>
+
 #include "element.h"
-#include "tinyxml2.h"
 
 namespace sfui
 {

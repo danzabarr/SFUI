@@ -5,7 +5,8 @@
 #include <functional>
 #include <vector>
 
-#include "tinyxml2.h"
+#include <TinyXML-2/tinyxml2.h>
+#include <SFML/Graphics.hpp>
 
 #include "element.h"
 #include "control.h"

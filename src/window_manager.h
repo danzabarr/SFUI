@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "tinyxml2.h"
+#include <TinyXML-2/tinyxml2.h>
 
 #include "window.h"
 #include "element.h"
