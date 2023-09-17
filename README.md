@@ -1,2 +1,3 @@
 # SFUI
- UI for SFMLSimple Fast Media Library
+ GUI library for SFML (Simple Fast Media Library)
+ In development.
