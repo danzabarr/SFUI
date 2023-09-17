@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include <SFML/Graphics.hpp>
 #include <TinyXML-2/tinyxml2.h>
 
 #include "window.h"

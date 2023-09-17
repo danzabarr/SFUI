@@ -2,8 +2,8 @@
 #include "element.h"
 #include <string>
 
-#include <TinyXML-2/tinyxml2.h>
 #include <SFML/Graphics.hpp>
+#include <TinyXML-2/tinyxml2.h>
 
 namespace sfui
 {

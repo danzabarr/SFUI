@@ -71,28 +71,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(ProjectDir)objs\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(ProjectDir)objs\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(ProjectDir)objs\$(Platform)\$(Configuration)\</IntDir>
-    <OutDir>$(ProjectDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML\$(Platform);$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(ProjectDir)objs\$(Platform)\$(Configuration)\</IntDir>
-    <OutDir>$(ProjectDir)builds\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\freetype;$(ProjectDir)lib\SFML\$(Platform);$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -163,28 +163,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\application.cpp" />
-    <ClCompile Include="src\element.cpp" />
-    <ClCompile Include="src\global.cpp" />
     <ClCompile Include="src\SFUI.cpp" />
-    <ClCompile Include="src\tinyxml2.cpp" />
-    <ClCompile Include="src\window_manager.cpp" />
-    <ClCompile Include="src\window.cpp" />
+    <ClCompile Include="include\TinyXML-2\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\application.h" />
-    <ClInclude Include="src\attribute.h" />
-    <ClInclude Include="src\color.h" />
-    <ClInclude Include="src\control.h" />
-    <ClInclude Include="src\element.h" />
-    <ClInclude Include="src\params.h" />
-    <ClInclude Include="src\xml.h" />
-    <ClInclude Include="src\field.h" />
-    <ClInclude Include="src\global.h" />
-    <ClInclude Include="src\tinyxml2.h" />
-    <ClInclude Include="src\vector2_ext.h" />
-    <ClInclude Include="src\window.h" />
-    <ClInclude Include="src\window_manager.h" />
+    <ClInclude Include="include\TinyXML-2\tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

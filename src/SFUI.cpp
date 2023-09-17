@@ -1,5 +1,30 @@
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+int main()
+{
+	sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(800, 600), "SFML works!");
+	sf::Event event;
+
+	while (window.isOpen())
+	{
+		while (window.pollEvent(event))
+		{
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
+				window.close();
+		}
+
+		window.clear(sf::Color::White);
+
+		window.display();
+	}
+
+
+	return 0;
+}
+
 #ifdef FALSE
-#else
 #include <iostream>
 #include <string>
 #include <functional>
