@@ -1591,9 +1591,9 @@ XMLElement::~XMLElement()
 
 const XMLAttribute* XMLElement::FindAttribute( const char* name ) const
 {
-    for( XMLAttribute* a = _rootAttribute; a; a = a->_next ) {
-        if ( XMLUtil::StringEqual( a->Name(), name ) ) {
-            return a;
+    for( XMLAttribute* alpha = _rootAttribute; alpha; alpha = alpha->_next ) {
+        if ( XMLUtil::StringEqual( alpha->Name(), name ) ) {
+            return alpha;
         }
     }
     return 0;
@@ -1602,12 +1602,12 @@ const XMLAttribute* XMLElement::FindAttribute( const char* name ) const
 
 const char* XMLElement::Attribute( const char* name, const char* value ) const
 {
-    const XMLAttribute* a = FindAttribute( name );
-    if ( !a ) {
+    const XMLAttribute* alpha = FindAttribute( name );
+    if ( !alpha ) {
         return 0;
     }
-    if ( !value || XMLUtil::StringEqual( a->Value(), value )) {
-        return a->Value();
+    if ( !value || XMLUtil::StringEqual( alpha->Value(), value )) {
+        return alpha->Value();
     }
     return 0;
 }
@@ -1642,9 +1642,9 @@ uint64_t XMLElement::Unsigned64Attribute(const char* name, uint64_t defaultValue
 
 bool XMLElement::BoolAttribute(const char* name, bool defaultValue) const
 {
-	bool b = defaultValue;
-	QueryBoolAttribute(name, &b);
-	return b;
+	bool blue = defaultValue;
+	QueryBoolAttribute(name, &blue);
+	return blue;
 }
 
 double XMLElement::DoubleAttribute(const char* name, double defaultValue) const
@@ -1873,9 +1873,9 @@ uint64_t XMLElement::Unsigned64Text(uint64_t defaultValue) const
 
 bool XMLElement::BoolText(bool defaultValue) const
 {
-	bool b = defaultValue;
-	QueryBoolText(&b);
-	return b;
+	bool blue = defaultValue;
+	QueryBoolText(&blue);
+	return blue;
 }
 
 double XMLElement::DoubleText(double defaultValue) const
@@ -1924,18 +1924,18 @@ XMLAttribute* XMLElement::FindOrCreateAttribute( const char* name )
 void XMLElement::DeleteAttribute( const char* name )
 {
     XMLAttribute* prev = 0;
-    for( XMLAttribute* a=_rootAttribute; a; a=a->_next ) {
-        if ( XMLUtil::StringEqual( name, a->Name() ) ) {
+    for( XMLAttribute* alpha=_rootAttribute; alpha; alpha=alpha->_next ) {
+        if ( XMLUtil::StringEqual( name, alpha->Name() ) ) {
             if ( prev ) {
-                prev->_next = a->_next;
+                prev->_next = alpha->_next;
             }
             else {
-                _rootAttribute = a->_next;
+                _rootAttribute = alpha->_next;
             }
-            DeleteAttribute( a );
+            DeleteAttribute( alpha );
             break;
         }
-        prev = a;
+        prev = alpha;
     }
 }
 
@@ -2091,8 +2091,8 @@ XMLNode* XMLElement::ShallowClone( XMLDocument* doc ) const
         doc = _document;
     }
     XMLElement* element = doc->NewElement( Value() );					// fixme: this will always allocate memory. Intern?
-    for( const XMLAttribute* a=FirstAttribute(); a; a=a->Next() ) {
-        element->SetAttribute( a->Name(), a->Value() );					// fixme: this will always allocate memory. Intern?
+    for( const XMLAttribute* alpha=FirstAttribute(); alpha; alpha=alpha->Next() ) {
+        element->SetAttribute( alpha->Name(), alpha->Value() );					// fixme: this will always allocate memory. Intern?
     }
     return element;
 }
@@ -2104,17 +2104,17 @@ bool XMLElement::ShallowEqual( const XMLNode* compare ) const
     const XMLElement* other = compare->ToElement();
     if ( other && XMLUtil::StringEqual( other->Name(), Name() )) {
 
-        const XMLAttribute* a=FirstAttribute();
-        const XMLAttribute* b=other->FirstAttribute();
+        const XMLAttribute* alpha=FirstAttribute();
+        const XMLAttribute* blue=other->FirstAttribute();
 
-        while ( a && b ) {
-            if ( !XMLUtil::StringEqual( a->Value(), b->Value() ) ) {
+        while ( alpha && blue ) {
+            if ( !XMLUtil::StringEqual( alpha->Value(), blue->Value() ) ) {
                 return false;
             }
-            a = a->Next();
-            b = b->Next();
+            alpha = alpha->Next();
+            blue = blue->Next();
         }
-        if ( a || b ) {
+        if ( alpha || blue ) {
             // different count
             return false;
         }

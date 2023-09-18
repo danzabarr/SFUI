@@ -1,174 +1,384 @@
-#pragma once
+#include <iomanip>
 #include <algorithm>
-#include <sstream>
+
+typedef unsigned char uint8;
+typedef unsigned int uint32;
+
 namespace sfui
 {
-	typedef unsigned int uint32;
-	typedef unsigned char uint8;
-	
-	template<typename T>
-	struct Proxy
+	// Helper functions
+
+	static uint8 ftoi8(float f)
 	{
-		virtual void operator= (T& value) = 0;
+		return static_cast<uint8>(std::clamp(f, 0.f, 1.f) * 255);
+	}
 
-		virtual void operator= (Proxy<T>& proxy) = 0;
+	static uint32 htoi32(std::string hex)
+	{
+		// removes optional #
+		if (hex.size() > 0 && hex[0] == '#')
+			hex = hex.substr(1);
 
-		virtual operator T() = 0;
+		// discards extra digits
+		if (hex.size() > 8)
+			hex = hex.substr(0, 8);
+
+		// validate digits
+		for (size_t i = 0; i < hex.size(); i++)
+		{
+			bool numeric = hex[i] >= '0' && hex[i] <= '9';
+			bool lower = hex[i] >= 'a' && hex[i] <= 'f';
+			bool upper = hex[i] >= 'A' && hex[i] <= 'F';
+
+			if (!numeric && !lower && !upper)
+			{
+				std::cout << "Warning: failed to convert to color from hex string \"" << hex << "\"" << std::endl;
+				return 0;
+			}
+		}
+
+		// adds alpha if missing
+		if (hex.size() <= 6)
+			hex += "00";
+
+		// adds leading zeros
+		while(hex.size() < 8)
+			hex = "0" + hex;
+
+		uint32 value = 0;
+		for (size_t i = 0; i < hex.size(); i++)
+		{
+			value <<= 4;
+			if (hex[i] >= '0' && hex[i] <= '9')
+				value |= hex[i] - '0';
+			else if (hex[i] >= 'a' && hex[i] <= 'f')
+				value |= hex[i] - 'a' + 10;
+			else if (hex[i] >= 'A' && hex[i] <= 'F')
+				value |= hex[i] - 'A' + 10;
+		}
+		return value;
+	}
+
+	float* RGBtoHSV(float r, float g, float b)
+	{
+		float HSV[3] = { 0, 0, 0 };
+		float& h = HSV[0];
+		float& s = HSV[1];
+		float& v = HSV[2];
+
+		float max = std::max({ r, g, b });
+		float min = std::min({ r, g, b });
+
+		v = max;
+
+		float diff = max - min;
+		s = max == 0.0f ? 0.0f : diff / max;
+
+		if (max == min) {
+			h = 0.0f;
+		}
+		else {
+			if (max == r) {
+				h = (g - b) / diff + (g < b ? 6.0f : 0.0f);
+			}
+			else if (max == g) {
+				h = (b - r) / diff + 2.0f;
+			}
+			else {
+				h = (r - g) / diff + 4.0f;
+			}
+
+			h /= 6.0f;
+		}
+
+		return HSV;
+	}
+
+	/// <summary>
+	/// Stores color data in a union of 1x uint32 and 4x uint8. 
+	/// Data can be accessed as a composite or as individual channels.
+	/// </summary>
+	union ColorData
+	{
+		uint32 composite;
+		uint8 channels[4];
+
+		ColorData(uint32 rgba) :
+			composite(rgba)
+		{}
+
+		ColorData(uint8 red, uint8 green, uint8 blue, uint8 alpha) :
+			channels{ alpha, blue, green, red }
+		{}
+	};
+
+	/// <summary>
+	/// Holds a reference to one of the four bytes of a color data object.
+	/// Deals with floating point to byte conversion, assignment, comparison and arithmetic.
+	/// </summary>
+	struct ColorChannel
+	{
+		uint8& value;
+
+		ColorChannel(uint8& value) :
+			value(value)
+		{}
+
+		ColorChannel(const ColorChannel& other) :
+			value(other.value)
+		{}
+
+		// float conversion
+		operator float() const
+		{
+			return static_cast<float>(value) / 255.f;
+		}
+
+		// float assignment
+		ColorChannel& operator=(float value)
+		{
+			this->value = ftoi8(value);
+			return *this;
+		}
+
+		// float comparison
+		bool operator==(const float& other) const
+		{
+			return ftoi8(other) == value;
+		}
+		bool operator!=(const float& other) const
+		{
+			return ftoi8(other) != value;
+		}
+
+		// float arithmetic
+		ColorChannel& operator+=(const float& other)
+		{
+			value = ftoi8(static_cast<float>(value) / 255.f + other);
+			return *this;
+		}
+
+		ColorChannel& operator-=(const float& other)
+		{
+			value = ftoi8(static_cast<float>(value) / 255.f - other);
+			return *this;
+		}
+
+		ColorChannel& operator*=(const float& other)
+		{
+			value = ftoi8(static_cast<float>(value) / 255.f * other);
+			return *this;
+		}
+
+		ColorChannel& operator/=(const float& other)
+		{
+			value = ftoi8(static_cast<float>(value) / 255.f / other);
+			return *this;
+		}
+
+		// float arithmetic
+		float operator+(const float& other) const
+		{
+			return static_cast<float>(value) / 255.f + other;
+		}
+
+		float operator-(const float& other) const
+		{
+			return static_cast<float>(value) / 255.f - other;
+		}
+
+		float operator*(const float& other) const
+		{
+			return static_cast<float>(value) / 255.f * other;
+		}
+
+		float operator/(const float& other) const
+		{
+			return static_cast<float>(value) / 255.f / other;
+		}
 	};
 
 	struct Color
 	{
-		uint32 value;
+	public:
+		ColorData data;
+		ColorChannel red;
+		ColorChannel green;
+		ColorChannel blue;
+		ColorChannel alpha;
 
-		struct : public Proxy<uint8>
-		{
-			virtual void operator= (uint8& red)
-			{
-				Color& color = (*reinterpret_cast<Color*>(reinterpret_cast<uint8*>(&red) - 3));
-				color.value = (color.value & 0xFFFFFF00) | red;
-			}
-
-			virtual void operator= (Proxy<uint8>& proxy)
-			{
-				Color& color = *reinterpret_cast<Color*>(reinterpret_cast<uint8*>(&proxy) - 3);
-				color.value = (color.value & 0xFFFFFF00) | proxy;
-			}
-
-			virtual operator uint8()
-			{
-				Color& color = *reinterpret_cast<Color*>(reinterpret_cast<uint8*>(this) - 3);
-				return color.value & 0xFF;
-			}
-
-		} red;
+	public:
 
 		Color() :
-			value(0)
+			data(0),
+			red(data.channels[3]), green(data.channels[2]), blue(data.channels[1]), alpha(data.channels[0])
 		{}
 
 		Color(uint32 rgba) :
-			value(rgba)
+			data(rgba),
+			red(data.channels[3]), green(data.channels[2]), blue(data.channels[1]), alpha(data.channels[0])
 		{}
 
-		Color(const Color& color) :
-			value(color.value)
+		Color(std::string hex) :
+			data(htoi32(hex)),
+			red(data.channels[3]), green(data.channels[2]), blue(data.channels[1]), alpha(data.channels[0])
 		{}
 
-		Color(uint32 value)
-			: value(value) 
+		Color(float red, float green, float blue, float alpha = 1.f) :
+			data(ftoi8(red), ftoi8(green), ftoi8(blue), ftoi8(alpha)),
+			red(data.channels[3]), green(data.channels[2]), blue(data.channels[1]), alpha(data.channels[0])
 		{}
 
-		Color(uint8 r, uint8 g, uint8 b, uint8 a = 255) :
-			value((a << 24) | (b << 16) | (g << 8) | r) 
+		Color(const Color& other) :
+			data(other.data),
+			red(data.channels[3]), green(data.channels[2]), blue(data.channels[1]), alpha(data.channels[0])
 		{}
 
-		Color(float r, float g, float b, float a = 1.f) :
-			value
-			(
-				(static_cast<uint32>(std::clamp(a, 0.f, 1.f) * 255) << 24) | 
-				(static_cast<uint32>(std::clamp(b, 0.f, 1.f) * 255) << 16) |
-				(static_cast<uint32>(std::clamp(g, 0.f, 1.f) * 255) << 8) |
-				static_cast<uint32>(std::clamp(r, 0.f, 1.f) * 255)
-			)
-		{}
-
-		uint32 operator() (const Color& color)
+		// uint32 conversion
+		operator uint32() const
 		{
-			return color.value;
+			return data.composite;
 		}
 
-		Color operator= (const Color& color)
+		// Color assignment
+		Color& operator=(const Color& other)
 		{
-			value = color.value;
+			data.composite = other.data.composite;
 			return *this;
 		}
 
-		Color operator= (const uint32& rgba)
+		// uint32 assignment
+		Color& operator=(const uint32 rgba)
 		{
-			value = rgba;
+			data.composite = rgba;
 			return *this;
 		}
 
-		Color operator= (const char* hex)
+		// string assignment
+		//Color& operator=(const std::string& hex)
+		//{
+		//	data.composite = htoi32(hex);
+		//	return *this;
+		//}
+
+		// float arithmetic (just scaling)
+		Color& operator*=(const float& other)
 		{
-			
+			red *= other;
+			green *= other;
+			blue *= other;
+			alpha *= other;
+			return *this;
 		}
 
-		static Color fromHex(const char* hex)
+		Color& operator/=(const float& other)
 		{
-			uint8 r = 0, g = 0, b = 0, a = 255;
-
-			if (hex[0] == '#')
-			{
-				if (strlen(hex) == 7)
-				{
-					r = std::stoi(std::string(hex + 1, 2), (size_t*)nullptr, 16);
-					g = std::stoi(std::string(hex + 3, 2), (size_t*)nullptr, 16);
-					b = std::stoi(std::string(hex + 5, 2), (size_t*)nullptr, 16);
-				}
-				else if (strlen(hex) == 9)
-				{
-					r = std::stoi(std::string(hex + 1, 2), (size_t*)nullptr, 16);
-					g = std::stoi(std::string(hex + 3, 2), (size_t*)nullptr, 16);
-					b = std::stoi(std::string(hex + 5, 2), (size_t*)nullptr, 16);
-					a = std::stoi(std::string(hex + 7, 2), (size_t*)nullptr, 16);
-				}
-				else
-				{
-					throw std::invalid_argument("Invalid color string");
-				}
-			}
-			else
-			{
-				throw std::invalid_argument("Invalid color string");
-			}
+			red /= other;
+			green /= other;
+			blue /= other;
+			alpha /= other;
+			return *this;
 		}
 
-		uint8 red() const
+		friend Color operator*(const Color& lhs, const float& rhs)
 		{
-			return (value >> 24) & 0xFF;
+			Color result(lhs);
+			result *= rhs;
+			return result;
 		}
 
-		uint8 green() const
+		friend Color operator/(const Color& lhs, const float& rhs)
 		{
-			return (value >> 16) & 0xFF;
+			Color result(lhs);
+			result /= rhs;
+			return result;
 		}
 
-		uint8 blue() const
+		// Color arithmetic
+		Color& operator+=(const Color& other)
 		{
-			return (value >> 8) & 0xFF;
+			red += other.red;
+			green += other.green;
+			blue += other.blue;
+			alpha += other.alpha;
+			return *this;
 		}
 
-		uint8 alpha() const
+		Color& operator-=(const Color& other)
 		{
-			return value & 0xFF;
+			red -= other.red;
+			green -= other.green;
+			blue -= other.blue;
+			alpha -= other.alpha;
+			return *this;
 		}
 
-		static const Color White;
-		static const Color Black;
-		static const Color Red;
-		static const Color Green;
-		static const Color Blue;
-		static const Color Yellow;
-		static const Color Magenta;
-		static const Color Cyan;
-		static const Color Transparent;
+		Color& operator*=(const Color& other)
+		{
+			red *= other.red;
+			green *= other.green;
+			blue *= other.blue;
+			alpha *= other.alpha;
+			return *this;
+		}
+
+		Color& operator/=(const Color& other)
+		{
+			red /= other.red;
+			green /= other.green;
+			blue /= other.blue;
+			alpha /= other.alpha;
+			return *this;
+		}
+
+		Color operator+(const Color& other) const
+		{
+			Color result(*this);
+			result += other;
+			return result;
+		}
+
+		Color operator-(const Color& other) const
+		{
+			Color result(*this);
+			result -= other;
+			return result;
+		}
+
+		Color operator*(const Color& other) const
+		{
+			Color result(*this);
+			result *= other;
+			return result;
+		}
+
+		Color operator/(const Color& other) const
+		{
+			Color result(*this);
+			result /= other;
+			return result;
+		}
 	};
 
-	const Color Color::White = 0xFFFFFFFF;
-	const Color Color::Black = 0xFF000000;
-	const Color Color::Red = 0xFFFF0000;
-	const Color Color::Green = 0xFF00FF00;
-	const Color Color::Blue = 0xFF0000FF;
-	const Color Color::Yellow = 0xFFFFFF00;
-	const Color Color::Magenta = 0xFFFF00FF;
-	const Color Color::Cyan = 0xFF00FFFF;
-	const Color Color::Transparent = 0x00000000;
-}
+	std::ostream& operator<<(std::ostream& os, const ColorChannel& channel)
+	{
+		return os << std::hex << std::setfill('0') << std::uppercase << std::setw(2) << (uint32)channel.value;
+	}
 
-using namespace sfui;
+	std::ostream& operator<<(std::ostream& os, const Color& color)
+	{
+		os << "#" << std::hex << std::setfill('0') << std::uppercase << std::setw(8) << color.data.composite;
 
-int main()
-{
-	Color red = Color::Red;
+		float r = color.red;
+		float g = color.green;
+		float b = color.blue;
+		float a = color.alpha;
+
+		os << " r=" << std::fixed << std::setprecision(2) << r;
+		os << " g=" << std::fixed << std::setprecision(2) << g;
+		os << " b=" << std::fixed << std::setprecision(2) << b;
+		os << " a=" << std::fixed << std::setprecision(2) << a;
+
+		return os;
+	}
 }

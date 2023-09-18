@@ -63,7 +63,7 @@ namespace sfui
 					std::is_same_v<std::tuple_element_t<1, std::tuple<Params...>>, int>
 				)
 			{
-				if (name == "hello") return [this](sf::Color color, int b) { std::cout << "oaou" << std::endl; };
+				if (name == "hello") return [this](sf::Color color, int blue) { std::cout << "oaou" << std::endl; };
 			}
 			else if constexpr
 			(

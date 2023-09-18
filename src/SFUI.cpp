@@ -1,9 +1,157 @@
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <iomanip>
+
+#include <sstream>
+#include <vector>
+
+#include "rect.h"
+#include "vector2_ext.h"
+
+#include "color.h"
+
+using namespace sfui;
 
 int main()
 {
+	ColorData data(0x00112233);
+
+	Color c1;
+	c1.data = data;
+
+	Color c2;
+	c2.data = data;
+
+	c1 = 0xDECEA5ED;
+
+
+	c1 *= 2.f;
+
+	c1 = Color("#DECEA5ED");
+
+	std::cout << "c1: " << c1 << std::endl;
+	std::cout << "c2: " << c2 << std::endl;
+
+	return 0;
+
+
+	Color color("#00112233");
+	std::cout << "declare color(\"#00112233\")" << std::endl;
+
+	std::cout << "Red:   " << color.red << std::endl;
+	std::cout << "Green: " << color.green << std::endl;
+	std::cout << "Blue:  " << color.blue << std::endl;
+	std::cout << "Alpha: " << color.alpha << std::endl;
+	std::cout << "Color: " << color << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "assign color to Color(.2f, .2f, .2f)" << std::endl;
+	color = Color(.2f, .2f, .2f) * 2.f;
+
+	std::cout << "Red:   " << color.red << std::endl;
+	std::cout << "Green: " << color.green << std::endl;
+	std::cout << "Blue:  " << color.blue << std::endl;
+	std::cout << "Alpha: " << color.alpha << std::endl;
+	std::cout << "Color: " << color << std::endl;
+	std::cout << std::endl;
+	
+	color = 0x99887766;
+	std::cout << "assign color to 0x9988776" << std::endl;
+
+	std::cout << "Red:   " << color.red << std::endl;
+	std::cout << "Green: " << color.green << std::endl;
+	std::cout << "Blue:  " << color.blue << std::endl;
+	std::cout << "Alpha: " << color.alpha << std::endl;
+	std::cout << "Color: " << color << std::endl;
+	std::cout << std::endl;
+
+	color /= 10.f;
+	std::cout << "divide color by 10" << std::endl;
+
+	std::cout << "Red:   " << color.red << std::endl;
+	std::cout << "Green: " << color.green << std::endl;
+	std::cout << "Blue:  " << color.blue << std::endl;
+	std::cout << "Alpha: " << color.alpha << std::endl;
+	std::cout << "Color: " << color << std::endl;
+	std::cout << std::endl;
+
+	std::cout << (color.red == 0.141592653f) << std::endl;
+
+	
+
+//	std::cout << color << std::endl;
+
+	return 0;
+
+	float x0 = 0;
+	float x1 = 1;
+	float x2 = 2;
+
+	float y0 = 0;
+	float y1 = 2;
+	float y2 = 3;
+
+	ReferencePoint<float> pr0 = { x0, y0 };
+	ReferencePoint<float> pr1 = { x1, y1 };
+	ReferencePoint<float> pr2 = { x2, y2 };
+
+	sf::Vector2f vec = { 9, 9 };
+
+	std::cout << "assigning pr0 = vec" << std::endl;
+	pr0 = vec;
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "assigning vec = {3, 3}" << std::endl;
+	vec = { 3, 3 };
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+
+	std::cout << "assigning x0 = 15" << std::endl;
+	x0 = 15;
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "assigning pr1.x = 2" << std::endl;
+	pr1.x = 2;
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "assigning pr1 = pr2" << std::endl;
+	pr1 = pr2;
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "assigning pr2.y += 200" << std::endl;
+	pr2.y += 200;
+
+	std::cout << "0: " << pr0 << std::endl;
+	std::cout << "1: " << pr1 << std::endl;
+	std::cout << "2: " << pr2 << std::endl;
+	std::cout << "v: " << vec << std::endl;
+	std::cout << std::endl;
+
+	return 1;
+
 	sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(800, 600), "SFML works!");
 	sf::Event event;
 

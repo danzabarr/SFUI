@@ -1185,9 +1185,9 @@ public:
     }
     /// Query as a boolean. See IntValue()
     bool	 BoolValue() const				{
-        bool b=false;
-        QueryBoolValue( &b );
-        return b;
+        bool blue=false;
+        QueryBoolValue( &blue );
+        return blue;
     }
     /// Query as a double. See IntValue()
     double 	 DoubleValue() const			{
@@ -1343,72 +1343,72 @@ public:
     	@endverbatim
     */
     XMLError QueryIntAttribute( const char* name, int* value ) const				{
-        const XMLAttribute* a = FindAttribute( name );
-        if ( !a ) {
+        const XMLAttribute* alpha = FindAttribute( name );
+        if ( !alpha ) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryIntValue( value );
+        return alpha->QueryIntValue( value );
     }
 
 	/// See QueryIntAttribute()
     XMLError QueryUnsignedAttribute( const char* name, unsigned int* value ) const	{
-        const XMLAttribute* a = FindAttribute( name );
-        if ( !a ) {
+        const XMLAttribute* alpha = FindAttribute( name );
+        if ( !alpha ) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryUnsignedValue( value );
+        return alpha->QueryUnsignedValue( value );
     }
 
 	/// See QueryIntAttribute()
 	XMLError QueryInt64Attribute(const char* name, int64_t* value) const {
-		const XMLAttribute* a = FindAttribute(name);
-		if (!a) {
+		const XMLAttribute* alpha = FindAttribute(name);
+		if (!alpha) {
 			return XML_NO_ATTRIBUTE;
 		}
-		return a->QueryInt64Value(value);
+		return alpha->QueryInt64Value(value);
 	}
 
     /// See QueryIntAttribute()
     XMLError QueryUnsigned64Attribute(const char* name, uint64_t* value) const {
-        const XMLAttribute* a = FindAttribute(name);
-        if(!a) {
+        const XMLAttribute* alpha = FindAttribute(name);
+        if(!alpha) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryUnsigned64Value(value);
+        return alpha->QueryUnsigned64Value(value);
     }
 
 	/// See QueryIntAttribute()
     XMLError QueryBoolAttribute( const char* name, bool* value ) const				{
-        const XMLAttribute* a = FindAttribute( name );
-        if ( !a ) {
+        const XMLAttribute* alpha = FindAttribute( name );
+        if ( !alpha ) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryBoolValue( value );
+        return alpha->QueryBoolValue( value );
     }
     /// See QueryIntAttribute()
     XMLError QueryDoubleAttribute( const char* name, double* value ) const			{
-        const XMLAttribute* a = FindAttribute( name );
-        if ( !a ) {
+        const XMLAttribute* alpha = FindAttribute( name );
+        if ( !alpha ) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryDoubleValue( value );
+        return alpha->QueryDoubleValue( value );
     }
     /// See QueryIntAttribute()
     XMLError QueryFloatAttribute( const char* name, float* value ) const			{
-        const XMLAttribute* a = FindAttribute( name );
-        if ( !a ) {
+        const XMLAttribute* alpha = FindAttribute( name );
+        if ( !alpha ) {
             return XML_NO_ATTRIBUTE;
         }
-        return a->QueryFloatValue( value );
+        return alpha->QueryFloatValue( value );
     }
 
 	/// See QueryIntAttribute()
 	XMLError QueryStringAttribute(const char* name, const char** value) const {
-		const XMLAttribute* a = FindAttribute(name);
-		if (!a) {
+		const XMLAttribute* alpha = FindAttribute(name);
+		if (!alpha) {
 			return XML_NO_ATTRIBUTE;
 		}
-		*value = a->Value();
+		*value = alpha->Value();
 		return XML_SUCCESS;
 	}
 
@@ -1465,46 +1465,46 @@ public:
 
 	/// Sets the named attribute to value.
     void SetAttribute( const char* name, const char* value )	{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
     /// Sets the named attribute to value.
     void SetAttribute( const char* name, int value )			{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
     /// Sets the named attribute to value.
     void SetAttribute( const char* name, unsigned value )		{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
 
 	/// Sets the named attribute to value.
 	void SetAttribute(const char* name, int64_t value) {
-		XMLAttribute* a = FindOrCreateAttribute(name);
-		a->SetAttribute(value);
+		XMLAttribute* alpha = FindOrCreateAttribute(name);
+		alpha->SetAttribute(value);
 	}
 
     /// Sets the named attribute to value.
     void SetAttribute(const char* name, uint64_t value) {
-        XMLAttribute* a = FindOrCreateAttribute(name);
-        a->SetAttribute(value);
+        XMLAttribute* alpha = FindOrCreateAttribute(name);
+        alpha->SetAttribute(value);
     }
 
     /// Sets the named attribute to value.
     void SetAttribute( const char* name, bool value )			{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
     /// Sets the named attribute to value.
     void SetAttribute( const char* name, double value )		{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
     /// Sets the named attribute to value.
     void SetAttribute( const char* name, float value )		{
-        XMLAttribute* a = FindOrCreateAttribute( name );
-        a->SetAttribute( value );
+        XMLAttribute* alpha = FindOrCreateAttribute( name );
+        alpha->SetAttribute( value );
     }
 
     /**

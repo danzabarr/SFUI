@@ -5,50 +5,13 @@
 #include <concepts>
 #include <iostream>
 #include <type_traits>
+#include <any>
 #include <typeindex>
+
+#include "element.h"
 
 namespace sfui
 {
-	using func = std::ostream & (*)(std::ostream&, const std::any&);
-
-	std::unordered_map<std::type_index, func> from_any
-	{
-		{std::type_index(typeid(int)),
-			 [](auto& o, const std::any& a)-> std::ostream& { return o << std::any_cast<int>(a); }},
-		{std::type_index(typeid(double)),
-			 [](auto& o, const std::any& a)-> std::ostream& { return o << std::any_cast<double>(a); }},
-		{std::type_index(typeid(std::string)),
-			 [](auto& o, const std::any& a)-> std::ostream& { return o << std::any_cast<std::string>(a); }}
-	};
-
-	inline decltype(auto) operator<<(std::ostream& o, const std::any& a)
-	{
-		return sfui::from_any[std::type_index(a.type())](o, a);
-	}
-
-	template<typename TTuple, typename UTuple, std::size_t... Indices>
-	static constexpr bool is_convertible_tuple(std::index_sequence<Indices...>) {
-		return
-			// Parameter counts match
-			std::tuple_size<TTuple>::value == std::tuple_size<UTuple>::value &&
-
-			// All types are convertible
-			(
-				... &&
-				std::is_convertible
-				<
-				std::tuple_element_t<Indices, TTuple>,
-				std::tuple_element_t<Indices, UTuple>
-				>::value
-				);
-	}
-
-	template<typename TTuple, typename UTuple>
-	static constexpr bool is_convertible_tuple()
-	{
-		return std::is_convertible<TTuple, UTuple>(std::make_index_sequence<std::tuple_size_v<TTuple>> {});
-	}
-
 	//----------- Forward Declarations----------------
 	template <typename... T>
 	class Control;
@@ -60,7 +23,8 @@ namespace sfui
 	//----------- Declaration of Control----------------
 
 	/// <summary>
-	/// A Control is an interface for dispatching callbacks to different kinds of listeners and bindings.
+	/// A Control is an interface for the user to dispatch
+	/// actions to different kinds of listeners and bindings.
 	/// It can be extended to define a specific kind of control.
 	/// A Control<bool> would be extended to define a Toggle.
 	/// </summary>
@@ -87,7 +51,7 @@ namespace sfui
 		//void bind(std::function<void(T...)> callback);
 
 		//template <typename...Params>
-		void bind(std::function<void(T...)> callback) //requires has_convertible_params<Params...>
+		void bind(std::function<void(T...)> callback) requires has_convertible_params<Params...>
 		{
 			bindings.push_back(callback);
 		}

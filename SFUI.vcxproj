@@ -163,11 +163,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\application.cpp" />
+    <ClCompile Include="src\element.cpp" />
     <ClCompile Include="src\SFUI.cpp" />
     <ClCompile Include="include\TinyXML-2\tinyxml2.cpp" />
+    <ClCompile Include="src\window.cpp" />
+    <ClCompile Include="src\window_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TinyXML-2\tinyxml2.h" />
+    <ClInclude Include="src\application.h" />
+    <ClInclude Include="src\attribute.h" />
+    <ClInclude Include="src\color.h" />
+    <ClInclude Include="src\control.h" />
+    <ClInclude Include="src\element.h" />
+    <ClInclude Include="src\field.h" />
+    <ClInclude Include="src\global.h" />
+    <ClInclude Include="src\rect.h" />
+    <ClInclude Include="src\inset.h" />
+    <ClInclude Include="src\vec.h" />
+    <ClInclude Include="src\vector2_ext.h" />
+    <ClInclude Include="src\window.h" />
+    <ClInclude Include="src\window_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
